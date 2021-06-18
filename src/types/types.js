@@ -13,5 +13,5 @@ export const types = {
 
     loadAllCards: '[Card] Load All',
     updateCard: '[Card] Update Card',
-    addCard: '[Card] Add Card'
+    addCard: '[Card] Add Card',
 }

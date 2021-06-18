@@ -75,3 +75,18 @@ const addNewCard = (newCard) => ({
     type: types.addCard,
     payload: newCard
 })
+
+
+export const deleteCard = (deletingCard) => {
+    return ( dispatch ) => {
+        
+        const deletedCard = {
+            ...deletingCard,
+            wantDelete: true
+        }
+    
+        dispatch( updateCard( deletedCard ) )
+
+    }
+
+}
