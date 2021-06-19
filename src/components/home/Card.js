@@ -63,8 +63,8 @@ export const Card = ({ id, url = '', title = '', body = '', date= '', typeMedia 
         
     }
 
-    const handleUpdateCardInfo = () => {
-        
+    const handleUpdateCardInfo = (e) => {
+        e.preventDefault()
         const updatingCard = {
             ...cardSelected,
             title: actualTitle,
