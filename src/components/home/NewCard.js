@@ -1,5 +1,7 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
+
 import { addCard } from '../../actions/card'
 import { deselectNew } from '../../actions/ui'
 
@@ -7,11 +9,29 @@ export const NewCard = () => {
 
     const dispatch = useDispatch()
 
+    const { user } = useSelector(state => state.auth)
+    
+    const isGuest = (user.email === 'guest@guest.com') ? true : false
+
+    const messageOfDenial = () => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops... :(',
+            text: 'Guests can not do this !'
+        }) 
+    } 
+
     const handleDeselect = () => {
         dispatch( deselectNew() )
     }
 
     const handleFileClick = () => {
+
+        if ( isGuest ) {
+            messageOfDenial()
+            return
+        }
+
         document.querySelector('#fileSelector').click()
     }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
 
 import { deleteCard, updateCard } from '../../actions/card'
 import { deselectGridView } from '../../actions/ui'
@@ -18,12 +19,24 @@ export const Card = ({ id, url = '', title = '', body = '', date= '', typeMedia 
     const dispatch = useDispatch()
     const { cards } = useSelector(state => state.card)
     const { gridView } = useSelector(state => state.ui)
+    const { user } = useSelector(state => state.auth)
     
-    const cardRef = useRef(null)
+    const isGuest = (user.email === 'guest@guest.com') ? true : false
+
+    const messageOfDenial = () => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops... :(',
+            text: 'Guests can not do this !'
+        }) 
+    }  
     
     const [styleGridView, setStyleGridView] = useState( [ {}, styleMedia ] )
     
     const cardSelected = cards.find( (card) => card.id === id )
+    const cardRef = useRef(null)
+
+
 
     useEffect(() => {
         
@@ -65,6 +78,13 @@ export const Card = ({ id, url = '', title = '', body = '', date= '', typeMedia 
 
     const handleUpdateCardInfo = (e) => {
         e.preventDefault()
+
+        if ( isGuest ) {
+            messageOfDenial()
+            return
+        }
+
+
         const updatingCard = {
             ...cardSelected,
             title: actualTitle,
@@ -84,12 +104,18 @@ export const Card = ({ id, url = '', title = '', body = '', date= '', typeMedia 
             cardRef.current.scrollIntoView()
             setTimeout(() => {
                 document.getElementById(id).scrollIntoView()
-            }, 200);
+            }, 350);
         }
     }
 
     const handleDelete = (e) => {
+
         e.preventDefault()
+
+        if ( isGuest ) {
+            messageOfDenial()
+            return
+        }
         
         dispatch( deleteCard( cardSelected ) )
     }

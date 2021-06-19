@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginFirebase } from '../../actions/auth'
-import { useForm } from '../../hooks/useForm'
 
 
 export const LoginScreen = () => {
@@ -9,9 +8,22 @@ export const LoginScreen = () => {
     const dispatch = useDispatch()
     const { loading: authLoading } = useSelector(state => state.auth)
 
-    const [ formValues, handleInputChange ] = useForm({})
+    const [formValues, setformValues] = useState({
+        email: '',
+        password: ''
+    })
 
     const { email, password } = formValues
+    
+    const handleInputChange = ({ target }) => {
+        
+        setformValues({
+            ...formValues,
+            [ target.name ]: target.value
+        })
+        
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
